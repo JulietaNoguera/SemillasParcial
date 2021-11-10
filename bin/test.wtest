@@ -1,0 +1,66 @@
+
+import plantas.*
+import parcelas.*
+describe "tests" {
+	
+	
+	const soja1= new Soja(altura=0.6,anioDeObtencion= 2009)
+	const quinoa1= new Quinoa(anioDeObtencion= 2010, altura = 0.5,hrsSol=12)
+	const quinoa2= new Quinoa(anioDeObtencion= 2001, altura = 0.5,hrsSol=9)
+	const parcela1= new Parcelas( ancho= 20, largo= 1, horasDeSolParcela = 8)
+	
+	const soja2= new Soja( altura= 1,anioDeObtencion= 2009 )
+	const sojaT= new SojaTransgenica(altura= 0.5,anioDeObtencion= 2009 )
+	
+	const menta1= new Menta(anioDeObtencion=2005,altura=1)
+	const parcela2= new Parcelas( ancho= 2, largo= 6, horasDeSolParcela = 9)
+	const parcela3= new Parcelas( ancho= 2.5, largo= 2, horasDeSolParcela = 9)
+	
+	method initialize(){
+	
+	}
+
+
+
+
+test "soja"{
+	
+	assert.equals(7,soja1.horasDeSol())
+	assert.notThat(soja1.daNuevasSemillas())
+	assert.equals(0.6,soja1.espacio())
+}
+
+test "quinoa"{
+	assert.that(quinoa1.daNuevasSemillas())
+	assert.notThat(quinoa2.daNuevasSemillas())
+}
+
+test "parcelas"{
+	assert.equals(20,parcela1.superficie())
+	assert.equals(4,parcela1.cantidadMaXima())
+	
+	parcela1.agregarPlanta(soja2)
+	parcela1.agregarPlanta(soja2)
+	parcela1.agregarPlanta(soja2)
+	parcela1.agregarPlanta(soja2)
+	
+	assert.notThat(parcela1.tieneComplicaciones())
+	
+	assert.throwsExceptionWithMessage("No se le permite plantar mas plantas", {parcela1.plantarUnaPlanta(soja2)})
+}
+
+
+test "parcela ideal"{
+	assert.that(menta1.parcelaIdeal(parcela2))
+	
+	parcela1.agregarPlanta(soja2)
+	parcela1.agregarPlanta(soja2)
+	
+	assert.that(quinoa1.parcelaIdeal(parcela1))
+	assert.that(soja2.parcelaIdeal(parcela2))
+	assert.that(sojaT.parcelaIdeal(parcela3))
+}
+
+
+
+}
